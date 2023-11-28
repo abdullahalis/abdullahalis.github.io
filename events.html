@@ -1,27 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html
+ 
+lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gear Headz - Events</title>
+
+    
+<meta
+ 
+charset="UTF-8">
+
+    
+<meta
+ 
+name="viewport"
+ 
+content="width=device-width, initial-scale=1.0">
+
+    
+<title>Gear Headz - Events</title>
+    <link rel="stylesheet" href="colors.css">
     <style>
-        /* Include any specific styles for the Events page */
+        /* Add any specific styles for the Events page */
+        header {
+            background-color: var(--main-red);
+            color: white;
+            padding: 20px;
+        }
+
+        header h1 {
+            text-align: left;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header-links {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .header-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+
+        section {
+            padding: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding: 5px 10px;
+            border: 1px solid var(--light-gray);
+        }
+
+        .search-bar button {
+            padding: 5px 10px;
+            background-color: var(--main-red);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .event-filters {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .event-filters button {
+            padding: 5px 10px;
+            background-color: var(--dark-gray);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .event-card {
+            display: flex;
+            padding: 20px;
+            border: 1px solid var(--light-gray);
+            margin-bottom: 20px;
+        }
+
+        .event-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .event-card p {
+            margin-left: 20px;
+        }
+
+        .event-card p.event-name {
+            font-weight: bold;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .pagination button {
+            padding: 5px 10px;
+            background-color: var(--dark-gray);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-
     <header>
-        <h1>Gear Headz - Events</h1>
+        <div class="header-links">
+            <h1>Gear Headz</h1>
+            <a href="#">Modifications</a>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search for events">
+            <button>Search</button>
+        </div>
+
+        <div class="event-filters">
+            <span>Upcoming events near: Los Angeles, CA <a href="#">Change Location</a></span>
+        </div>
+
+        <div class="list-filters">
+        <button>Filters</button>
+            <button>Sort</button>
+        </div>
     </header>
 
     <section>
-        <h2>Nearby Events</h2>
-        <!-- Add your events content here -->
+        <h2>Upcoming Events</h2>
+
+        <div class="event-card">
+            <img src="laguna.jpg" alt="Laguna Beach Classic">
+            <p class="event-name">Laguna Beach Classic</p>
+            <p>10/29</p>
+        </div>
+
+        <div class="event-card">
+            <img src="Gold-Coast.jpg" alt="Gold Coast Social">
+            <p class="event-name">Gold Coast Social</p>
+            <p>10/30</p>
+        </div>
     </section>
 
-    <footer>
-        <p>Back to <a href="index.html">Home</a>.</p>
-    </footer>
+    <div class="pagination">
+        <button>Next Page</button>
+    </div>
 
-</body>
-</html>
+    <footer>
