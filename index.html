@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="colors.css">
+    <title>Gear Headz</title>
+    <style>
+        body {
+            font-family: Rany;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: var(--dark-gray);
+        }
+
+        header {
+            background-color: var(--dark-gray);
+            color: var(--main-red);
+            padding: 1rem;
+            text-align: center;
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            font-family: OTF® Glusp;
+            font-size: 32px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            flex-direction: column;
+            padding-bottom: 0;
+        }
+
+        .car-and-suggested {
+            display: flex;
+            justify-content: space-around;
+
+            width: 100%;
+            background-color: var(--dark-gray);
+        }
+
+        .user-car,
+        .suggested-events {
+            padding: 2rem;
+            text-align: center;
+            flex: 1;
+        }
+
+        .car-selection {
+            flex-direction: column;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            margin: 1rem;
+        }
+
+        .user-car {
+            flex-direction: column;
+            display: flex;
+            text-align: center;
+            align-items: center;
+        }
+
+        .gray-button {
+            background-color: var(--light-gray);
+            color: white;
+            font-size: 16px;
+            font-family: Rany;
+            font-weight: 700;
+            word-wrap: break-word;
+            padding: 8px 16px;
+            border-radius: 100px;
+            cursor:pointer;
+        }
+
+        .red-button {
+            width: 30%;
+            background-color: var(--main-red);
+            color: white;
+            font-size: 16px;
+            font-family: Rany;
+            font-weight: 700;
+            padding: 24px 36px;
+            border-radius: 100px;
+            cursor:pointer;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .car-selection select {
+            width: 75%;
+            text-align: center;
+            padding: 10px;
+            font-family: Rany;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: border-color 0.3s ease-in-out;
+            margin-bottom: 1.5rem;
+        }
+
+        .car-selection select:hover,
+        .car-selection select:focus {
+            border-color: var(--main-red); /* Change border color on hover and focus */
+            cursor: pointer;
+        }
+
+        h2 {
+            font-size: 36px;
+        }
+        .h2-white {
+            color: white;
+        }
+
+        img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 2rem;
+            border-radius: 25%;
+        }
+
+        h3 {
+            color: white;
+        }
+
+        /* dialog {
+            display: none;
+        } */
+
+        a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .suggested-event-name:hover {
+            text-decoration: underline;
+            cursor: pointer; /* Optional: Change cursor to a pointer to indicate interactivity */
+            font-size: larger;
+        }
+
+        footer {
+            text-align: center;
+            justify-content: center;
+            background-color: var(--off-white);
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Gear Headz</h1>
+    </header>
+
+    <div class="car-and-suggested">
+        <!-- Start Selected Car Section -->
+        <section class="user-car">
+            <h2 class="h2-white">Selected Car</h2>
+            <div class="car-selection">
+                
+                <img id="selectedCarImage" src="images/nissan gtr 2020.jpeg" alt="selected car"/>
+                
+                <select id="carSelect" onchange="updateSelectedCar()">
+                    <!-- Options will be dynamically added here using JavaScript -->
+                </select>
+                <button class="gray-button" onclick="openAddCarDialog()">Add New Car</button>
+
+                <!-- Add Car Dialog -->
+                <dialog id="addCarDialog">
+                    <label for="makeInput">Make:</label>
+                    <input type="text" id="makeInput" required><br>
+
+                    <label for="modelInput">Model:</label>
+                    <input type="text" id="modelInput" required><br>
+
+                    <label for="yearInput">Year:</label>
+                    <input type="number" id="yearInput" required><br>
+
+                    <label for="imageInput">Image Path:</label>
+                    <input type="text" id="imageInput" required><br>
+
+                    <button onclick="addCarFromDialog()">Add Car</button>
+                    <button onclick="closeAddCarDialog()">Cancel</button>
+                </dialog>
+                <!-- End Add Car Dialog -->
+
+                <script>
+                    // JavaScript to handle car selection and image update
+                    const carSelect = document.getElementById('carSelect');
+                    const selectedCarImage = document.getElementById('selectedCarImage');
+                    const addCarDialog = document.getElementById('addCarDialog');
+
+                    // Define the Car object
+                    function Car(year, make, model, image) {
+                        this.year = year;
+                        this.make = make;
+                        this.model = model;
+                        this.image = image;
+                    }
+
+                    // Create an array of Car objects
+                    const cars = [
+                        new Car(2022, 'Nissan', 'GTR', 'images/nissan gtr 2020.jpeg'),
+                        new Car(2022, 'Mazda', 'RX-7', 'path/to/mazda_rx7.jpg'),
+                        // Add more cars as needed
+                    ];
+
+                    // Populate the dropdown with car options
+                    cars.forEach(car => {
+                        const option = document.createElement('option');
+                        option.value = car.make.toLowerCase(); // Using make as a value for simplicity
+                        option.textContent = `${car.year} ${car.make} ${car.model}`;
+                        carSelect.appendChild(option);
+                    });
+
+                    // Set the default selected car (Nissan GTR)
+                    let selectedCar = cars[0];
+                    selectedCarImage.src = selectedCar.image;
+
+                    function updateSelectedCar() {
+                        // Find the selected car object based on the selected value
+                        selectedCar = cars.find(car => car.make.toLowerCase() === carSelect.value);
+                        selectedCarImage.src = selectedCar.image;
+                        localStorage.selectedCar = selectedCar;
+                    }
+
+                    function openAddCarDialog() {
+                        // Clear previous input values
+                        document.getElementById('makeInput').value = '';
+                        document.getElementById('modelInput').value = '';
+                        document.getElementById('yearInput').value = '';
+                        document.getElementById('imageInput').value = '';
+
+                        // Show the dialog
+                        addCarDialog.showModal();
+                    }
+
+                    function closeAddCarDialog() {
+                        // Close the dialog
+                        addCarDialog.close();
+                    }
+
+                    function addCarFromDialog() {
+                        // Get input values
+                        const make = document.getElementById('makeInput').value;
+                        const model = document.getElementById('modelInput').value;
+                        const year = document.getElementById('yearInput').value;
+                        const image = document.getElementById('imageInput').value;
+
+                        // Validate input values
+                        if (!make || !model || !year || !image) {
+                            alert('Please fill in all fields.');
+                            return;
+                        }
+
+                        // Create a new car object
+                        const newCar = new Car(parseInt(year), make, model, image);
+
+                        // Add the new car object to the array
+                        cars.push(newCar);
+
+                        // Add a new option to the dropdown
+                        const option = document.createElement('option');
+                        option.value = newCar.make.toLowerCase(); // Using make as a value for simplicity
+                        option.textContent = `${newCar.year} ${newCar.make} ${newCar.model}`;
+                        carSelect.appendChild(option);
+
+                        // Update the selected car
+                        selectedCar = newCar;
+                        selectedCarImage.src = newCar.image;
+                        updateSelectedCar();
+
+                        // Close the dialog
+                        addCarDialog.close();
+                    }
+                </script>
+            </div>
+            <button class="red-button" style="margin-top: 3rem;" onclick="(() => { window.location.href = 'modifications.html'; })()">Modifications</button>
+        </section>
+        <!-- End of Car Selection  -->
+
+        <section class="suggested-events">
+            <h2 class = "h2-white">Suggested Events</h2>
+            <img src="images/car-meet-pic.jpeg" style="margin: 1rem; cursor: pointer;">
+            <h3 class="suggested-event-name">Gold Coast Social</h3>
+            <h4 style="color: white; font-weight: 400;">1.3 miles away</h4>
+            <button class="red-button" style="margin-top: 5rem;"" onclick="(() => { window.location.href = 'events.html'; })()">Events</button>
+        </section>
+    </div>
+
+    <footer>
+        <h2 style="color: var(--almost-black);">Saved</h2>
+
+    </footer>
+
+</body>
+</html>

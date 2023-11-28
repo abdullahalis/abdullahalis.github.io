@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifications</title>
+    <style>
+        body {
+            font-family: Rany;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .modification-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            text-align: left;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Modifications</h1>
+
+    <div id="modificationsList"></div>
+
+    <script>
+        // Define the Modification object
+        function Modification(name, price, image, category, part, saved) {
+            this.name = name;
+            this.price = price;
+            this.image = image;
+            this.category = category;
+            this.saved = saved;
+        }
+
+        // Create an array of Modification objects
+        const modifications = [
+            new Modification('Mophorn GT Wing Spoiler 43.3inch', 230, 'images/mophorn spoiler.jpeg', 'cosmetic', 'spoiler', false),
+            new Modification('RASTP Universal Racing Steering Wheel 13.58', 75, 'images/rastp steering wheel.jpg', 'cosmetic', 'steering wheel', false),            
+            new Modification('Glossy Midnight Purple Wrap', 75, 'images/wrap.webp', 'cosmetic', 'wrap', false),            
+            new Modification('Nismo 57CR Rims', 601.75, 'images/nismo.webp', 'cosmetic', 'rims', false),            
+            new Modification('F14 Drag Satin Black Rims', 648.19, 'images/forgestar-f14-wheel-5lug-satin-black-17x12.jpeg', 'cosmetic', 'rims', false),            
+            new Modification('AH02 Silver Rims', 505.23, 'images/AH02_1911_SML_01_1296x.webp', 'cosmetic', 'rims', false),            
+            // Add more modifications as needed
+        ];
+
+        // Function to display modifications on the page
+        function displayModifications() {
+            const modificationsList = document.getElementById('modificationsList');
+
+            modifications.forEach(modification => {
+                const modificationItem = document.createElement('div');
+                modificationItem.className = 'modification-item';
+
+                const modificationImage = document.createElement('img');
+                modificationImage.src = modification.image;
+                modificationItem.appendChild(modificationImage);
+
+                const modificationName = document.createElement('p');
+                modificationName.textContent = `Name: ${modification.name}`;
+                modificationItem.appendChild(modificationName);
+
+                const modificationPrice = document.createElement('p');
+                modificationPrice.textContent = `Price: $${modification.price}`;
+                modificationItem.appendChild(modificationPrice);
+
+                const modificationCategory = document.createElement('p');
+                modificationCategory.textContent = `Category: ${modification.category}`;
+                modificationItem.appendChild(modificationCategory);
+
+                const modificationSaved = document.createElement('p');
+                modificationSaved.textContent = `Saved: ${modification.saved ? 'Yes' : 'No'}`;
+                modificationItem.appendChild(modificationSaved);
+
+                modificationsList.appendChild(modificationItem);
+            });
+        }
+
+        // Call the displayModifications function to populate the page
+        displayModifications();
+    </script>
+
+</body>
+</html>
