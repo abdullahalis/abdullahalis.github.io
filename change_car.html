@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Car</title>
+</head>
+<body>
+
+    <header>
+        <h1>Change Car</h1>
+    </header>
+
+    <div style="display: flex; justify-content: space-between;">
+
+        <!-- Left side -->
+        <div style="width: 48%;">
+
+            <h2>Saved Information</h2>
+
+            <!-- Display saved information with radio buttons -->
+            <form id="carForm">
+                <ul id="carList"></ul>
+            </form>
+
+        </div>
+
+        <!-- Right side -->
+        <div style="width: 48%;">
+
+            <h2>Add New Car</h2>
+
+            <!-- Input boxes -->
+            <div>
+                <label for="make">Make:</label>
+                <input type="text" id="make" placeholder="Enter make">
+            </div>
+
+            <div>
+                <label for="model">Model:</label>
+                <input type="text" id="model" placeholder="Enter model">
+            </div>
+
+            <div>
+                <label for="year">Year:</label>
+                <input type="text" id="year" placeholder="Enter year">
+            </div>
+
+            <!-- Add button -->
+            <button onclick="addCar()">Add</button>
+
+        </div>
+
+    </div>
+
+    <!-- Continue button -->
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="continueProcess()">Continue</button>
+    </div>
+
+    <script>
+        function addCar() {
+        // Get values from input boxes
+        var make = document.getElementById("make").value;
+        var model = document.getElementById("model").value;
+        var year = document.getElementById("year").value;
+
+        // Display the information on the left side with a radio button
+        var carList = document.getElementById("carList");
+        var radioBtn = document.createElement("input");
+        radioBtn.type = "radio";
+        radioBtn.name = "carOption";
+        radioBtn.value = make + " " + model + " " + year;
+
+        var label = document.createElement("label");
+        label.textContent = make + " " + model + " " + year;
+
+        var listItem = document.createElement("li");
+        listItem.appendChild(radioBtn);
+        listItem.appendChild(label);
+
+        carList.appendChild(listItem);
+
+        // Clear input boxes
+        document.getElementById("make").value = "";
+        document.getElementById("model").value = "";
+        document.getElementById("year").value = "";
+        }
+
+        function continueProcess() {
+        // Get the selected car information
+        var selectedCar = document.querySelector("input[name='carOption']:checked");
+
+        if (selectedCar) {
+        alert("Continue process with: " + selectedCar.value);
+        } else {
+        alert("Please select a car before continuing.");
+        }
+        }
+    </script>
+
+</body>
+</html>
