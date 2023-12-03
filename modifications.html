@@ -3,35 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="colors.css">
     <title>Modifications</title>
+    
+    <h1 id="title">Modifications</h1>
+    <button>Change Car</button>
+    
+    <style>
+        h1 {
+            text-align: left;
+            padding-left: 4rem;
+            padding-top: 2rem;
+        }
+
+        
+            
+        
+    </style>
+</head>
+<body>
+    <div class="modification-list-container">
+        <div class="filters">
+            <div class="cosmetic-filter-div">
+                <h2>Cosmetic</h2>
+                <div class="checkboxes" id="cosmeticBox">
+                </div>
+            </div>
+            <div class="performance-filter-div">
+                <h2>Performance</h2>
+                <div class="checkboxes" id="performanceBox">
+                </div>
+            </div>
+        </div>
+
+        <div class="modification-list" id="modificationsList"></div>
+        
+    </div>
+
+    <!-- <div id="modificationsList"></div> -->
+
     <style>
         body {
             font-family: Rany;
             text-align: center;
             margin-top: 50px;
+            background-color: white;
+            color: var(--almost-black);
         }
 
         .modification-item {
+            width:100%;
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: 10px;
             margin: 10px;
-            display: inline-block;
-            text-align: left;
+            display: inline-flex;
+            text-align: center;
+            align-items: center;
         }
 
         img {
-            max-width: 100%;
-            height: auto;
+            width: 125px;
+            height: 125px;
             margin-bottom: 10px;
+            border-radius: 10px;
+            margin-right: 4rem;
         }
+        .modification-name {
+            font-weight: 700;
+            width: 25%;
+        }
+
+        .modification-price {
+            font-weight: 700;
+            width: 50%
+        }
+
+        .modification-saved {
+            height: 30px;
+            width: 35px;
+            cursor: pointer;
+        }
+
+        .modification-list-container {
+            display: flex;
+            justify-content: space-around;
+
+            width: 100%;
+        }
+
+        .filters {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            text-align: left;
+        }
+
+        
+
+        button {
+            text-align: left;
+            background-color: var(--light-gray);
+            color: white;
+            font-size: 16px;
+            font-family: Rany;
+            font-weight: 700;
+            word-wrap: break-word;
+            padding: 8px 16px;
+            border-radius: 100px;
+            cursor:pointer;
+        }
+
+        
     </style>
-</head>
-<body>
-
-    <h1>Modifications</h1>
-
-    <div id="modificationsList"></div>
 
     <script>
         // Define the Modification object
@@ -40,52 +125,215 @@
             this.price = price;
             this.image = image;
             this.category = category;
+            this.part = part;
             this.saved = saved;
         }
+        
+        window.onload = function() {
+            selectedCar = JSON.parse(localStorage.getItem('selectedCar'))
+            carName = selectedCar.year + " " + selectedCar.make + " " + selectedCar.model
+            title = document.getElementById("title")
+            
+            title.textContent = `Modifications for ${carName}`
+        };
+        
+
+
+        const cosmeticFilters = ["All Cosmetic", "Rims", "Spoilers", "Steering Wheels", "Seats", "Wraps"]
+        const performanceFilters = ["All Performance", "Intake", "Wheels", "Brakes", "Nitrous", "Exhaust"]
 
         // Create an array of Modification objects
         const modifications = [
-            new Modification('Mophorn GT Wing Spoiler 43.3inch', 230, 'images/mophorn spoiler.jpeg', 'cosmetic', 'spoiler', false),
-            new Modification('RASTP Universal Racing Steering Wheel 13.58', 75, 'images/rastp steering wheel.jpg', 'cosmetic', 'steering wheel', false),            
-            new Modification('Glossy Midnight Purple Wrap', 75, 'images/wrap.webp', 'cosmetic', 'wrap', false),            
-            new Modification('Nismo 57CR Rims', 601.75, 'images/nismo.webp', 'cosmetic', 'rims', false),            
-            new Modification('F14 Drag Satin Black Rims', 648.19, 'images/forgestar-f14-wheel-5lug-satin-black-17x12.jpeg', 'cosmetic', 'rims', false),            
-            new Modification('AH02 Silver Rims', 505.23, 'images/AH02_1911_SML_01_1296x.webp', 'cosmetic', 'rims', false),            
+            new Modification('Mophorn GT Wing Spoiler 43.3inch', 230, 'images/mophorn spoiler.jpeg', 'cosmetic', 'Spoilers', false),
+            new Modification('RASTP Universal Racing Steering Wheel 13.58', 75, 'images/rastp steering wheel.jpg', 'cosmetic', 'Steering Wheels', false),            
+            new Modification('Glossy Midnight Purple Wrap', 75, 'images/wrap.webp', 'cosmetic', 'Wraps', false),            
+            new Modification('Nismo 57CR Rims', 601.75, 'images/nismo.webp', 'cosmetic', 'Rims', false),            
+            new Modification('F14 Drag Satin Black Rims', 648.19, 'images/forgestar-f14-wheel-5lug-satin-black-17x12.jpeg', 'cosmetic', 'Rims', false),            
+            new Modification('AH02 Silver Rims', 505.23, 'images/AH02_1911_SML_01_1296x.webp', 'cosmetic', 'Rims', false),            
             // Add more modifications as needed
         ];
 
         // Function to display modifications on the page
         function displayModifications() {
+            console.log("displaying mods")
             const modificationsList = document.getElementById('modificationsList');
 
-            modifications.forEach(modification => {
+            while (modificationsList.firstChild) {
+                modificationsList.removeChild(modificationsList.firstChild);
+            }
+
+            filteredMods = []
+
+            cosmeticFilters.forEach(filter => {
+                currentFilterBox = document.getElementById(`cosmetic-${filter}`)
+
+                if (currentFilterBox.checked) {
+                    modifications.forEach(modification => {
+                        console.log(modification.part)
+                        
+                        if (modification.part == filter) {
+                            filteredMods.push(modification)
+                        }
+                    });
+                }
+            });
+
+            performanceFilters.forEach(filter => {
+                currentFilterBox = document.getElementById(`performance-${filter}`)
+                
+                if (currentFilterBox.checked) {
+                    modifications.forEach(modification => {
+                        console.log(modification.part)
+                        
+                        if (modification.part == filter) {
+                            filteredMods.push(modification)
+                        }
+                    });
+                }
+            });
+
+            if (filteredMods.length == 0) {
+                filteredMods = modifications;
+            }
+
+            filteredMods.forEach(modification => {
                 const modificationItem = document.createElement('div');
                 modificationItem.className = 'modification-item';
 
                 const modificationImage = document.createElement('img');
+                modificationImage.className = 'modification-image';
                 modificationImage.src = modification.image;
                 modificationItem.appendChild(modificationImage);
 
                 const modificationName = document.createElement('p');
-                modificationName.textContent = `Name: ${modification.name}`;
+                modificationName.className = 'modification-name';
+                modificationName.textContent = `${modification.name}`;
                 modificationItem.appendChild(modificationName);
 
                 const modificationPrice = document.createElement('p');
-                modificationPrice.textContent = `Price: $${modification.price}`;
+                modificationPrice.className = 'modification-price';
+                modificationPrice.textContent = `$${modification.price}`;
                 modificationItem.appendChild(modificationPrice);
 
-                const modificationCategory = document.createElement('p');
-                modificationCategory.textContent = `Category: ${modification.category}`;
-                modificationItem.appendChild(modificationCategory);
-
-                const modificationSaved = document.createElement('p');
-                modificationSaved.textContent = `Saved: ${modification.saved ? 'Yes' : 'No'}`;
+                const modificationSaved = document.createElement('img');
+                modificationSaved.className = 'modification-saved';
+                modificationSaved.addEventListener("click",() => {
+                    modSaved(modification);
+                })
+                console.log(modification.saved)
+                if (modification.saved == false) {
+                    modificationSaved.src = 'images/empty heart.webp'
+                }
+                else {
+                    console.log("saved")
+                    modificationSaved.src = 'images/full heart.webp'
+                }
                 modificationItem.appendChild(modificationSaved);
 
                 modificationsList.appendChild(modificationItem);
             });
         }
 
+        // Function to create filter checkboxes dynamically
+        function createFilterCheckboxes() {
+            const cosmeticBox = document.getElementById('cosmeticBox');
+
+            cosmeticFilters.forEach(filter => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'filter';
+                checkbox.id = `cosmetic-${filter}`;
+                checkbox.checked = false; // By default, all filters are selected
+                checkbox.addEventListener('change', applyFilters, checkbox.id);
+
+                const label = document.createElement('label');
+                label.htmlFor = `performance-${filter}`;
+                label.textContent = filter;
+
+                cosmeticBox.appendChild(checkbox);
+                cosmeticBox.appendChild(label);
+                cosmeticBox.appendChild(document.createElement('br'));
+            });
+
+            const performanceBox = document.getElementById('performanceBox');
+
+            performanceFilters.forEach(filter => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'filter';
+                checkbox.value = filter;
+                checkbox.id = `performance-${filter}`;
+                checkbox.checked = false; // By default, all filters are selected
+                checkbox.addEventListener('change', applyFilters, `performance-${filter}`);
+
+                const label = document.createElement('label');
+                label.htmlFor = `performance-${filter}`;
+                label.textContent = filter;
+
+                performanceBox.appendChild(checkbox);
+                performanceBox.appendChild(label);
+                performanceBox.appendChild(document.createElement('br'));
+            });
+        }
+
+        
+
+        function applyFilters(checkboxEvent) {
+            checkboxId = checkboxEvent.target.id
+            console.log(checkboxEvent.target.id);
+
+            if (checkboxId == "cosmetic-All Cosmetic") {
+                const cosmeticAll = document.getElementById("cosmetic-All Cosmetic")
+
+                if (cosmeticAll.checked) {
+                    cosmeticFilters.forEach(filter => {
+                        checkbox = document.getElementById(`cosmetic-${filter}`)
+                        checkbox.checked = true;
+                    });
+                }
+                else {
+                    cosmeticFilters.forEach(filter => {
+                        checkbox = document.getElementById(`cosmetic-${filter}`)
+                        checkbox.checked = false;
+                    });
+                }
+            }
+            else if(checkboxId == "performance-All Performance") {
+                const performanceAll = document.getElementById("performance-All Performance")
+
+                if (performanceAll.checked) {
+                    performanceFilters.forEach(filter => {
+                        checkbox = document.getElementById(`performance-${filter}`)
+                        checkbox.checked = true;
+                    });
+                }
+                else {
+                    performanceFilters.forEach(filter => {
+                        checkbox = document.getElementById(`performance-${filter}`)
+                        checkbox.checked = false;
+                    });
+                }
+            }
+            displayModifications();
+
+        }
+
+        function modSaved(mod) {
+            console.log(mod)
+            if (mod.saved) {
+                mod.saved = false;
+            }
+            else {
+                mod.saved = true;
+            }
+            
+            displayModifications();
+        }
+
+        
+
+        // Call the createCategoryCheckboxes function to generate category checkboxes
+        createFilterCheckboxes();
         // Call the displayModifications function to populate the page
         displayModifications();
     </script>
