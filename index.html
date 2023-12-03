@@ -72,7 +72,6 @@
         }
 
         .red-button {
-            width: 30%;
             background-color: var(--main-red);
             color: white;
             font-size: 16px;
@@ -203,9 +202,10 @@
                     // Create an array of Car objects
                     const cars = [
                         new Car(2022, 'Nissan', 'GTR', 'images/nissan gtr 2020.jpeg'),
-                        new Car(2022, 'Mazda', 'RX-7', 'path/to/mazda_rx7.jpg'),
+                        new Car(2022, 'Mazda', 'RX-7', 'images/rx7.webp'),
                         // Add more cars as needed
                     ];
+                    
 
                     // Populate the dropdown with car options
                     cars.forEach(car => {
@@ -216,14 +216,26 @@
                     });
 
                     // Set the default selected car (Nissan GTR)
-                    let selectedCar = cars[0];
-                    selectedCarImage.src = selectedCar.image;
+                    if (!JSON.parse(localStorage.getItem('selectedCar'))) {
+                        selectedCar = cars[0];
+                        selectedCarImage.src = selectedCar.image;
+                        localStorage.setItem('selectedCar', JSON.stringify(selectedCar))
+                        console.log(JSON.parse(localStorage.getItem('selectedCar')))
+                    }
+                    else {
+                        selectedCar = JSON.parse(localStorage.getItem('selectedCar'))
+                        selectedCarImage.src = selectedCar.image;
+                        localStorage.setItem('selectedCar', JSON.stringify(selectedCar))
+                        console.log(JSON.parse(localStorage.getItem('selectedCar')))
+                    }
+                    
 
                     function updateSelectedCar() {
                         // Find the selected car object based on the selected value
                         selectedCar = cars.find(car => car.make.toLowerCase() === carSelect.value);
                         selectedCarImage.src = selectedCar.image;
-                        localStorage.selectedCar = selectedCar;
+                        localStorage.setItem('selectedCar', JSON.stringify(selectedCar))
+                        console.log(JSON.parse(localStorage.getItem('selectedCar')))
                     }
 
                     function openAddCarDialog() {
